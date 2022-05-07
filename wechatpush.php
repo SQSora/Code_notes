@@ -17,26 +17,29 @@ class Wechatpush extends Base
         $userOpenid = $this->useridToopenid($userid);
         $template_id = $template_id; //'tHRoi4rIN9k1REWATqWZdgzbtalqPSuXrGTFN_SWAnY';
 
-        $data = [
-            'touser' => $userOpenid,
-            'template_id' =>  $template_id, //些处为公众平台添加的模板ID
-            // 'url' => $Gourl,
-            'topcolor' => "#FF0000",
-            'data' => $data,
-            "miniprogram" => [
-                "appid" => "小程序id",
-                "pagepath" => "pages/special/special"
-            ],
-            // 'data' => [
+        //微信推送消息的模板内容
+            // 'data' => [   
             //         'first' => ['value' => "副标题内容", 'color' => "#fc0101"], //类似副标题
             //         'keyword1' => ['value' => "1", 'color' => "#ccc"], //标题
             //         'keyword2' => ['value' => "1", 'color' => "#ccc"], //内容
             //         'keyword3' => ['value' => "1", 'color' => "#ccc"], //内容
             //         'remark' => ['value' => "1"]  //内容
             // ],
+
+        $Pushdata = [
+            'touser' => $userOpenid,    //推送的用户的openid(公众号)
+            'template_id' =>  $template_id, //些处为公众平台添加的模板ID
+            // 'url' => $Gourl,
+            'topcolor' => "#FF0000",
+            'data' => $data,    //模板内容
+            "miniprogram" => [  //模板绑定小程序
+                "appid" => "小程序id",
+                "pagepath" => "pages/special/special"
+            ],
+ 
         ];
        $get_all_access_token = $this->get_access_token(); //获取公众号信息token
-        $json_data = json_encode($data); //转化成json数组让微信可以接收
+        $json_data = json_encode($Pushdata); //转化成json数组让微信可以接收
         $url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" . $get_all_access_token; //模板消息请求URL
         $res = $this->curl_post($url, urldecode($json_data));
         $res = json_decode($res, true);
