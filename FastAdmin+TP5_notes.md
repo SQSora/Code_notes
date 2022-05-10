@@ -1,4 +1,4 @@
-SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush
+SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush  
 
 
 
@@ -138,6 +138,11 @@ $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默
 # **View**
 
 ## **HTML**
+
+### **index.html**
+
+### **add.html AND Edit.html**
+
 
 ## **JS**
 
