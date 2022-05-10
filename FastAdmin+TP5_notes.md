@@ -11,27 +11,27 @@ SQSora 2022年5月9日 FastAdmin + TP5
 //FastAdmin从1.2.0版本开始已经内置了xss_clean函数用于清除过滤请求中可能的危险字段
 $data = $this->request->post('', '', 'trim,xss_clean');
 ```
-$\color{#00FFFF}{----}$ 
+ 
 
 ### find select
 ```php
 //find() VS select()    F为一维数组，S为二维数组
 ```
-$\color{#00FFFF}{----}$ 
+ 
 
 ### 获取特定值
 ```php
 //查询后只获取特定值， 0lny find
 $user_order = User::where('id', $this->auth->id)->value('special_order');
 ```
-$\color{#00FFFF}{----}$ 
+ 
 
 ### 关联查询
 ```php
 //关联特定的表，需要Model里面有关联的方法
 ->([with])
 ```
-$\color{#00FFFF}{----}$ 
+ 
 
 ### 字段自定义排序 特定排序
 ```php
@@ -39,7 +39,7 @@ $\color{#00FFFF}{----}$
 $user_order = 1,8,7,4
 ->orderRaw('field(需要排序的字段,' . $user_order . ')')
 ```
-$\color{#00FFFF}{----}$ 
+ 
 
 ### 验证器  validate 过滤  @[TP5官方文档](https://static.kancloud.cn/manual/thinkphp5/129352.html)
 ```php
@@ -56,7 +56,7 @@ $msg = [
 $validate = new Validate($rule, $msg);
 $result = $validate->check($row);
 ```
-$\color{#00FFFF}{----}$ 
+ 
 
 ### create  写入数据
 ```php
@@ -64,25 +64,32 @@ $\color{#00FFFF}{----}$
 //array|true $field 允许保存字段，true表示数据库有的字段才保存
 模型名称::create($data = [], $field = null)
 ```
-$\color{#00FFFF}{----}$ 
+ 
 
 ### 合并数组 数组合并 数组拼接
 ```php
 array_merge($array1, $array2);//两个数组有重复key时，后面的会覆盖前面
 array_merge_recursive($array1, $array2);  //不会进行键名覆盖，而是将多个相同键名的值递归组成一个数组。
 ```
-$\color{#00FFFF}{----}$ 
-### JSON json json_encode  json_decode
+ 
+### JSON json转换
 ```php
 json_decode($data, true)    //转换为JSON
 json_encode($data, JSON_UNESCAPED_UNICODE)   //???转换为中文并能保存中文到数据库???
 ```
-$\color{#00FFFF}{----}$ 
+ 
 
 
 # **controller**
 
 ## **API**
+
+### JSON json转换
+```php
+$data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默认值,过滤参数
+```
+ 
+
 
 
 ## **backend**
@@ -103,14 +110,14 @@ $\color{#00FFFF}{----}$
     protected $deleteTime = 'deletetime';
 
 ```
-$\color{#00FFFF}{----}$ 
+ 
 ### __关联查询数据库表__
     public function User()
     {
         //关联查询的目标模型路径,关联的外键,目标模型的主键,别名定义(已经废弃),JOIN类型 -> 预载入方式
         return $this->belongsTo('addons\cms\model\User', 'user_id', 'id')->setEagerlyType(0);
     }
-$\color{#00FFFF}{----}$ 
+ 
 
 # **View**
 
@@ -124,6 +131,8 @@ $\color{#00FFFF}{----}$
 
 
 # **其他**
+
+$\color{#00FFFF}{Ctrl + Shift + V 预览文件}$
 
 ## config.php文件配置相关
 ```
