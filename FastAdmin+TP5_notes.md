@@ -1,4 +1,4 @@
-SQSora 2022年5月9日 FastAdmin + TP5
+SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush
 
 
 
@@ -29,7 +29,14 @@ $user_order = User::where('id', $this->auth->id)->value('special_order');
 ### 关联查询
 ```php
 //关联特定的表，需要Model里面有关联的方法
-->([with])
+->with(['Model1,Model2'])
+
+//闭包关联查询,过滤特殊字符
+->with([
+   'Model1' => function ($query) {
+        $query->withField('id,name,email....');
+    }
+])
 ```
  
 
@@ -38,6 +45,16 @@ $user_order = User::where('id', $this->auth->id)->value('special_order');
 //将数据按照特定的格式进行排序 
 $user_order = 1,8,7,4
 ->orderRaw('field(需要排序的字段,' . $user_order . ')')
+```
+
+
+### SQL去重查询
+```php
+//group,显示结果为所有字段，对单一字段进行了去重操作
+模型->group('id')->select();
+
+//distinct,只能对field()的单一字段去重
+模型->distinct(true)->field('id')->select();
 ```
  
 
@@ -79,12 +96,11 @@ json_encode($data, JSON_UNESCAPED_UNICODE)   //???转换为中文并能保存中
 ```
  
 
-
 # **controller**
 
 ## **API**
 
-### JSON json转换
+### 接收传参 POST
 ```php
 $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默认值,过滤参数
 ```
@@ -97,7 +113,7 @@ $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默
 
 # **Model**
 
-### __模型初始化设置__
+### 模型初始化设置
 ```
     // 表名
     protected $name = 'company_attention';
