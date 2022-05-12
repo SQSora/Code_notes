@@ -4,7 +4,7 @@ SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush
 
  $\color{#00FFFF}{---}$ 
 # **PHP** **TP5语法**  
-### 接收参数
+* ### 接收参数
 ```php
 //变量名(不写则接收整个对象),默认值,过滤方法 
 //trim:过滤空格
@@ -12,18 +12,18 @@ SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush
 $data = $this->request->post('', '', 'trim,xss_clean');
 ```
  
-### find select
+* ### find select
 ```php
 // find() VS select()    F为一维数组，S为二维数组
 ```
 
-### 查询后获取特定值
+* ### 查询后获取特定值
 ```php
 //查询后只获取特定值， Olny find()
 $user_order = User::where('id', $this->auth->id)->value('special_order');
 ```
 
-### 关联查询
+* ### 关联查询
 ```php
 //关联特定的表，需要Model里面有关联的方法
 ->with(['Model1,Model2'])
@@ -36,14 +36,14 @@ $user_order = User::where('id', $this->auth->id)->value('special_order');
 ])
 ```
 
-### 字段自定义排序 特定排序
+* ### 字段自定义排序 特定排序
 ```php
 //将数据按照特定的格式进行排序 
 $user_order = 1,8,7,4
 ->orderRaw('field(需要排序的字段,' . $user_order . ')')
 ```
 
-### SQL去重查询
+* ### SQL去重查询
 ```php
 //group,显示结果为所有字段，对单一字段进行了去重操作
 模型->group('id')->select();
@@ -52,7 +52,7 @@ $user_order = 1,8,7,4
 模型->distinct(true)->field('id')->select();
 ```
 
-### 验证器  validate 过滤  @[TP5文档](https://static.kancloud.cn/manual/thinkphp5/129352.html)
+* ### 验证器  validate 过滤  @[TP5文档](https://static.kancloud.cn/manual/thinkphp5/129352.html)
 ```php
 //对前端提交的传输进行处理 
 $rule = [
@@ -68,20 +68,20 @@ $validate = new Validate($rule, $msg);
 $result = $validate->check($row);
 ```
 
-### create  写入数据
+* ### create  写入数据
 ```php
 //array      $data  要保存的数据数组
 //array|true $field 允许保存字段，true表示数据库有的字段才保存
 模型名称::create($data = [], $field = null)
 ```
 
-### 合并数组 数组合并 数组拼接
+* ### 合并数组 数组合并 数组拼接
 ```php
 array_merge($array1, $array2);//两个数组有重复key时，后面的会覆盖前面
 array_merge_recursive($array1, $array2);  //不会进行键名覆盖，而是将多个相同键名的值递归组成一个数组。
 ```
  
-### JSON json转换
+* ### JSON json转换
 ```php
 json_decode($data, true)    //转换为JSON
 json_encode($data, JSON_UNESCAPED_UNICODE)   //???转义为中文并能保存中文到数据库???
@@ -91,17 +91,17 @@ json_encode($data, JSON_UNESCAPED_UNICODE)   //???转义为中文并能保存中
 
 ## **API api开发相关**
 
-### 接收传参 POST
+* ### 接收传参 POST
 ```php
 $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默认值,过滤参数
 ```
 
 ## **backend后台开发**
-
+        暂无
 
 # **Model 模型**
 
-### 模型初始化设置
+* ### 模型初始化设置
 ```php
     // 表名
     protected $name = 'user';   //前缀在config/database.php中设置
@@ -115,7 +115,7 @@ $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默
 
 ```
  
-### __关联查询数据库表__
+* ### __关联查询数据库表__
 ```php
     public function User()
     {
@@ -128,12 +128,12 @@ $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默
 
 ## **HTML**
 
-### **index.html**
---
-### **add.html AND Edit.html**
-+ [@FastAdmin组件](https://doc.fastadmin.net/doc/component.html)
-+ [@SelectPage](https://doc.fastadmin.net/doc/178.html)
-+ [@表单认证](https://doc.fastadmin.net/doc/179.html)
+* ### **index.html**
+        暂无
+* ### **add.html AND Edit.html**
+    + [@FastAdmin组件](https://doc.fastadmin.net/doc/component.html)
+    + [@SelectPage](https://doc.fastadmin.net/doc/178.html)
+    + [@表单认证](https://doc.fastadmin.net/doc/179.html)
 ```html
 <!--绑定动态下拉 SelectPage
     1. class先加上 class=" selectpage"
@@ -146,6 +146,7 @@ $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默
 
 
 ## **JS**
+* ### 表格参数
 ```js
 sortName: 'weigh', //按照权重排序
 ```
@@ -159,7 +160,7 @@ sortName: 'weigh', //按照权重排序
 
 $\color{#00FFFF}{Ctrl + Shift + V 预览文件}$
 
-## config.php文件配置相关
+* ## config.php文件配置相关
 ```
 //调用插件的配置,与config.php中的配置同名 'name' => 'value'
 $config =  get_addon_config('cms'); //获取cms插件类的配置
@@ -167,6 +168,4 @@ $变量 = $config['name1'];   //value1
 $变量 = $config['name2'];
 ```
 
-## __微信消息推送 微信公众号 微信通知 微信模板__
-
-### **推送的逻辑代码**
+* ## __微信消息推送 微信公众号 微信通知 微信模板__
