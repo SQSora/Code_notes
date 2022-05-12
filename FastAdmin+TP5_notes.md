@@ -12,19 +12,16 @@ SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush
 $data = $this->request->post('', '', 'trim,xss_clean');
 ```
  
-
 ### find select
 ```php
-//find() VS select()    F为一维数组，S为二维数组
+// find() VS select()    F为一维数组，S为二维数组
 ```
- 
 
-### 获取特定值
+### 查询后获取特定值
 ```php
-//查询后只获取特定值， 0lny find
+//查询后只获取特定值， Olny find()
 $user_order = User::where('id', $this->auth->id)->value('special_order');
 ```
- 
 
 ### 关联查询
 ```php
@@ -38,7 +35,6 @@ $user_order = User::where('id', $this->auth->id)->value('special_order');
     }
 ])
 ```
- 
 
 ### 字段自定义排序 特定排序
 ```php
@@ -46,7 +42,6 @@ $user_order = User::where('id', $this->auth->id)->value('special_order');
 $user_order = 1,8,7,4
 ->orderRaw('field(需要排序的字段,' . $user_order . ')')
 ```
-
 
 ### SQL去重查询
 ```php
@@ -56,9 +51,8 @@ $user_order = 1,8,7,4
 //distinct,只能对field()的单一字段去重
 模型->distinct(true)->field('id')->select();
 ```
- 
 
-### 验证器  validate 过滤  @[TP5官方文档](https://static.kancloud.cn/manual/thinkphp5/129352.html)
+### 验证器  validate 过滤  @[TP5文档](https://static.kancloud.cn/manual/thinkphp5/129352.html)
 ```php
 //对前端提交的传输进行处理 
 $rule = [
@@ -73,7 +67,6 @@ $msg = [
 $validate = new Validate($rule, $msg);
 $result = $validate->check($row);
 ```
- 
 
 ### create  写入数据
 ```php
@@ -81,7 +74,6 @@ $result = $validate->check($row);
 //array|true $field 允许保存字段，true表示数据库有的字段才保存
 模型名称::create($data = [], $field = null)
 ```
- 
 
 ### 合并数组 数组合并 数组拼接
 ```php
@@ -92,31 +84,27 @@ array_merge_recursive($array1, $array2);  //不会进行键名覆盖，而是将
 ### JSON json转换
 ```php
 json_decode($data, true)    //转换为JSON
-json_encode($data, JSON_UNESCAPED_UNICODE)   //???转换为中文并能保存中文到数据库???
+json_encode($data, JSON_UNESCAPED_UNICODE)   //???转义为中文并能保存中文到数据库???
 ```
- 
 
-# **controller**
+# **controller 控制器**
 
-## **API**
+## **API api开发相关**
 
 ### 接收传参 POST
 ```php
 $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默认值,过滤参数
 ```
- 
+
+## **backend后台开发**
 
 
-
-## **backend**
-
-
-# **Model**
+# **Model 模型**
 
 ### 模型初始化设置
-```
+```php
     // 表名
-    protected $name = 'company_attention';
+    protected $name = 'user';   //前缀在config/database.php中设置
 
     // 开启自动写入时间戳字段
     protected $autoWriteTimestamp = 'int';
@@ -128,22 +116,24 @@ $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默
 ```
  
 ### __关联查询数据库表__
+```php
     public function User()
     {
         //关联查询的目标模型路径,关联的外键,目标模型的主键,别名定义(已经废弃),JOIN类型 -> 预载入方式
         return $this->belongsTo('addons\cms\model\User', 'user_id', 'id')->setEagerlyType(0);
     }
- 
+```
 
-# **View**
+# **View 前端视图**
 
 ## **HTML**
 
 ### **index.html**
-
+--
 ### **add.html AND Edit.html**
->[@FastAdmin组件](https://doc.fastadmin.net/doc/component.html)
->>表单认证[@FastAdmin组件](https://doc.fastadmin.net/doc/179.html)
++ [@FastAdmin组件](https://doc.fastadmin.net/doc/component.html)
++ [@SelectPage](https://doc.fastadmin.net/doc/178.html)
++ [@表单认证](https://doc.fastadmin.net/doc/179.html)
 ```html
 <!--绑定动态下拉 SelectPage
     1. class先加上 class=" selectpage"
@@ -177,86 +167,6 @@ $变量 = $config['name1'];   //value1
 $变量 = $config['name2'];
 ```
 
-## 微信消息推送相关
-```php
-    public function push($userid, $template_id, $data, $event = null)
-    {   
-        $data = [
-            'first' => ['value' => "副标题内容", 'color' => "#fc0101"], //类似副标题
-            'keyword1' => ['value' => 'name'],
-            'keyword2' => ['value' =>'哈哈'],
-            'remark' => ['value' =>'备注']
-        ]
-        $pushData = [
-            'touser'       => '目标用户的openid',
-            'template_id'  => $template_id    //'tHRoi4rIN9k1R...'//在公众平台模板裤的模板ID
-            // 'url' => $Gourl, //模板消息里“查看详情”的链接
-            'topcolor'     => "#FF0000",       //顶部颜色,可不写.$data类同
-            'data'         => $data,           //模板消息里的变量替换内容
-            "miniprogram"  => [
-                "appid"    => "小程序的appid",//给模板消息绑定小程序
-                "pagepath" => "小程序的页面路径"
-            ],
-        ];
-        $get_access_token = $this->get_access_token(); //获取公众号token
-        $json_data = json_encode($pushData); //转化成json数组让微信可以接收
-        $url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" . $get_access_token; //模板消息请求URL
-        $res = $this->curl_post($url, urldecode($json_data));
-        $res = json_decode($res, true);
-        if ($res['errcode'] == 0 && $res['errmsg'] == "ok") {
-            //发送成功后操作
-        } else {
-            //发送失败后操作
-        }
-    }
-```
-```php 
-    //将Wechat access_token 保存到数据库中缓存
-   public function get_access_token()
-    {
-        $appid = 'appid';
-        $secret = 'AppSecret';
-        $cachedata =  Db::name('access_token')
-            ->where('id', 1874)
-            ->where('time', '>', time())
-            ->find();
-        if ($cachedata) {
-            return $cachedata['access_token'];
-        } else {
-            //数据库token过期，重新到微信获取
-            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" . $appid . "&secret=" . $secret;
-            $res = $this->curl_get($url);
-            $res = json_decode($res, true);
-            $time = time() + 6999;  //微信默认7200秒过期
-            $data = [
-                'access_token' => $res['access_token'],
-                'time' => $time,
-            ];
-            Db::name('access_token')->where('id', 1874)->update($data);
-            return $res['access_token'];
-        }
-    }
-```
-```php
-    /**
-     * 发起POST请求
-     * @param string $url 请求地址
-     * @param string $data 请求参数
-     * @param string string $cookiePth
-     */
-    function curl_post($url, $data = [], $cookiePath = '')
-    {
-        $ch = curl_init(); // 初始化
-        curl_setopt($ch, CURLOPT_URL, $url); // 抓取指定网页
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // 要求结果为字符串且输出到屏幕上
-        curl_setopt($ch, CURLOPT_POST, 1); // POST提交方式
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data); // 请求参数
-        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookiePath); // 连接结束后保存cookie信息的文件
-        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookiePath); // 包含cookie信息的文件
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 禁用后cURL将终止从服务端进行验证
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0); // 检查服务器SSL证书中是否存在一个公用名
-        $res = curl_exec($ch); // 执行一个cURL会话
-        curl_close($ch); // 关闭一个cURL会话
-        return $res;
-    }
-```
+## __微信消息推送 微信公众号 微信通知 微信模板__
+
+### **推送的逻辑代码**
