@@ -43,10 +43,15 @@ class CRUD_template extends Base
     }
     public function add()
     {
-        $data = $this->request->post('', '', 'trim,xss_clean');
+        $data = $this->request->param('', '', 'trim,xss_clean');
         $this->checkValidate($data);
 
-        SoraModel::create($data, true);
+        $ProData = [
+            '附加的字段' => '附加的值',
+        ];
+        $Pushdata =  array_merge_recursive($data, $ProData);
+
+        Sora::create($Pushdata, true);
         $this->success('创建成功');
     }
     public function edit()
