@@ -1,5 +1,3 @@
 Heeeello world
 
-SQSora 
-
-PHP TP5 FastAdmin MySQL
+PHP TP5 FastAdmin MySQL WeChatPush
