@@ -8,17 +8,17 @@ use addons\cms\model\Wechataccounts;
 use think\Db;
 
 
-class Wechatpush extends Base
+class Wechatpush
 {
-    protected $noNeedLogin = ['*'];
     public function push($userid, $template_id, $data, $event = null)
     {   
-        $data = [
+        $data = [   //公众号模板的数据
             'first' => ['value' => "副标题内容", 'color' => "#fc0101"], //类似副标题
             'keyword1' => ['value' => 'name'],
             'keyword2' => ['value' =>'哈哈'],
             'remark' => ['value' =>'备注']
-        ]
+        ];
+        
         $pushData = [
             'touser'       => '目标用户的openid',
             'template_id'  => $template_id           //'tHRoi4rIN9k1R...'//在公众平台模板裤的模板ID
@@ -30,9 +30,10 @@ class Wechatpush extends Base
                 "pagepath" => "小程序的页面路径"
             ],
         ];
-        $get_access_token = $this->get_access_token(); //获取公众号token
+        
+        $access_token = $this->get_access_token(); //获取公众号token
         $json_data = json_encode($pushData); //转化成json数组让微信可以接收
-        $url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" . $get_access_token; //模板消息请求URL
+        $url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" . $access_token; //模板消息请求URL
         $res = $this->curl_post($url, urldecode($json_data));
         $res = json_decode($res, true);
         if ($res['errcode'] == 0 && $res['errmsg'] == "ok") {
@@ -41,6 +42,7 @@ class Wechatpush extends Base
             //发送失败后操作
         }
     }
+    
     //将userid转为openid
     public function useridToopenid($userid)
     {
@@ -48,6 +50,7 @@ class Wechatpush extends Base
         $b = Wechataccounts::where('unionid', $a['unionid'])->find();
         return $b['openid'];
     }
+    
     //将Wechat access_token 保存到数据库中缓存
     public function get_access_token()
     {
