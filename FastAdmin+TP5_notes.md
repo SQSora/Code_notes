@@ -149,6 +149,20 @@ $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默
 * ### 表格参数
 ```js
 sortName: 'weigh', //按照权重排序
+
+```
+* ### 使用JS处理后台的前端页面逻辑
+```js
+add: function () {                              //给add.html页面添加事件
+    $("#button_id").click(function () {         //给这个ID绑定点击事件
+        var text = $("#input_box1").val();      //获取输入框的值
+            //一些处理逻辑
+        $("#input_box2").val(text);             //给输入框赋值
+    };
+}
+edit: function () {  //edit.html页面添加事件
+    //处理逻辑
+}
 ```
 
 
