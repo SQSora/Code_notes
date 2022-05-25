@@ -1,26 +1,25 @@
 <?php
-namespace ...\controller\api;    修改命名空间
-// use ...\model\Sora as SoraModel;
+
+namespace addons\cms\controller\api;
+
+use addons\cms\model\Sora;
 use think\Validate;
 
-use function PHPSTORM_META\type;
-
-class CRUD_template extends Base
+class Test1
 {
     protected $noNeedLogin = ['*']; //登录限制
-
     public function index()
     {
-        $this->success('验证器.增删改查');
+        return '验证器和增删改查';
     }
     public function checkValidate()
     {
         //示例数据
-        // $data = [
-        //     'name'  => 'SQSora',
-        //     'age'   => 0,
-        //     'email' => ''
-        // ];
+        $data = [
+            'name'  => 'SQSora',
+            'age'   => 0,
+            'email' => ''
+        ];
         $rule = [   //验证规则
             'name'  => 'require|max:25',
             'age'   => 'number|between:0,1024',
@@ -35,36 +34,46 @@ class CRUD_template extends Base
         ];
         $validate = new Validate($rule, $msg);
         $result = $validate->check($data);
-        if ($result) {
-            return true;
-        } else {
+        if (!$result) {
             $this->error($validate->getError());
-        }
+        };
+        // if ($result) {
+        //     return true;
+        // } else {
+        //     $this->error($validate->getError());
+        // }
     }
     public function add()
     {
         $data = $this->request->param('', '', 'trim,xss_clean');
         $this->checkValidate($data);
-
         $ProData = [
             '附加的字段' => '附加的值',
         ];
         $Pushdata =  array_merge_recursive($data, $ProData);
-
         Sora::create($Pushdata, true);
         $this->success('创建成功');
     }
     public function edit()
     {
-        $data = $this->request->post('', '', 'trim,xss_clean');
+        $data = $this->request->param('', '', 'trim,xss_clean');
         $this->checkValidate($data);
-        //示例数据   
+        // 示例数据   
         // $data = [
         //     'id'  => 109,
         //     'name' => 'SQSora',
         //     'age'   => 1024,
         // ];
-        if ($sora = SoraModel::where('id', $data['id'])->find()) {
+
+        //修改或者创建
+        if ($SoraModel  = Sora::where('user_id', $this->auth->id)->find()) {
+            $SoraModel->isUpdate(true)->save($data);
+        } else {
+            $SoraModel = Sora::create($data, true);
+        };
+
+        //只修改
+        if ($sora = Sora::where('id', $data['id'])->find()) {
             $sora->allowField(true)->isUpdate(true)->save($data);
             $this->success('修改成功');
         } else {
@@ -84,8 +93,7 @@ class CRUD_template extends Base
     }
     public function getData()
     {
-        // $id = $this->request->param('id');
-        // $user_id = $this->auth->id
-        $this->success('获取成功', Sora::where('user_id', $user_id)->select());
+        $id = $this->request->param('id');
+        $this->success('获取成功', Sora::where('id', $id)->find());
     }
 }

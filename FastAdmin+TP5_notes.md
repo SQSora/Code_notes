@@ -23,6 +23,7 @@ $data = $this->request->post('', '', 'trim,xss_clean');
 $user_order = User::where('id', $this->auth->id)->value('special_order');
 ```
 
+
 * ### 关联查询
 ```php
 //关联特定的表，需要Model里面有关联的方法
@@ -73,6 +74,15 @@ $result = $validate->check($row);
 //array      $data  要保存的数据数组
 //array|true $field 允许保存字段，true表示数据库有的字段才保存
 模型名称::create($data = [], $field = null)
+```
+
+* ### 更新数据或新增数据
+```php
+    if ($SoraModel  = Sora::where('user_id', $this->auth->id)->find()) {
+        $SoraModel->isUpdate(true)->save($data);
+    } else {
+        $SoraModel = Sora::create($data, true);
+    };
 ```
 
 * ### 合并数组 数组合并 数组拼接
