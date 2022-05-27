@@ -18,7 +18,7 @@ class Test1 extends Base
             echo 'data: ' . $returnStr . "\n\n";
             ob_flush();
             flush();
-            //等待1秒钟，开始下一次查询
+            //等待1秒钟，开始下一次代码逻辑
             sleep(1);
         }
     }
