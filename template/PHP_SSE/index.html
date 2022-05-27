@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>服务器流媒体</title>
+</head>
+
+<body>
+	<h1>获取服务端更新数据</h1>
+	<div id="result"></div>
+
+	<script>
+		if (typeof (EventSource) !== "undefined") {
+			var source = new EventSource("http://127.0.0.1/test");
+			source.onmessage = function (event) {
+				console.log(event);
+				document.getElementById("result").innerHTML += event.data + "<br>";
+			};
+		}
+		else {
+			document.getElementById("result").innerHTML = "该浏览器不支持Server-Sent Events事件";
+		}
+	</script>
+
+</body>
