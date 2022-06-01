@@ -10,6 +10,7 @@ SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush
 //trim:过滤空格
 //FastAdmin从1.2.0版本开始已经内置了xss_clean函数用于清除过滤请求中可能的危险字段
 $data = $this->request->post('', '', 'trim,xss_clean');
+unset($data['id']);
 ```
  
 * ### find select
@@ -104,6 +105,7 @@ json_encode($data, JSON_UNESCAPED_UNICODE)   //???转义为中文并能保存中
 * ### 接收传参 POST
 ```php
 $data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默认值,过滤参数
+unset($data['id']);
 ```
 
 ## **backend后台开发**

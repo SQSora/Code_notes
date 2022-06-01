@@ -46,6 +46,8 @@ class Test1
     public function add()
     {
         $data = $this->request->param('', '', 'trim,xss_clean');
+        unset($data['id']);
+        
         $this->checkValidate($data);
         $ProData = [
             '附加的字段' => '附加的值',
@@ -57,6 +59,8 @@ class Test1
     public function edit()
     {
         $data = $this->request->param('', '', 'trim,xss_clean');
+        unset($data['id']);
+
         $this->checkValidate($data);
         // 示例数据   
         // $data = [
