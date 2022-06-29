@@ -1,4 +1,4 @@
-SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush  
+SQSora 2022年6月29日 PHP TP5 FastAdmin MySQL WeChatPush  
 
 
 
@@ -20,8 +20,17 @@ unset($data['id']);
 
 * ### 查询后获取特定值
 ```php
-//查询后只获取特定值， Olny find()
+//查询后只获取特定值, Olny find() value只能获取一个
 $user_order = User::where('id', $this->auth->id)->value('special_order');
+```
+* ### join查询后获取特定值,并自定义名称
+```php
+//查询后只获取特定值
+$commentList = Comment::alias('c')
+                ->join('cms_archives a', 'c.aid = a.id')
+                ->where(['c.user_id' => $this->auth->id])
+                ->field(['c.content', 'c.createtime' => 'comment_createtime'])
+                ...
 ```
 
 
@@ -133,6 +142,25 @@ unset($data['id']);
     {
         //关联查询的目标模型路径,关联的外键,目标模型的主键,别名定义(已经废弃),JOIN类型 -> 预载入方式
         return $this->belongsTo('addons\cms\model\User', 'user_id', 'id')->setEagerlyType(0);
+    }
+```
+* ### __获取器 获取数据的字段值后自动进行处理__
+```php
+    public function getstatusAttr($value)   //status为数据库字段
+    {
+        $status = [0=>'禁用',1=>'正常',2=>'待审核'];
+        return $status[$value];
+        // 获取原始字段数据
+        echo $user->getData('status');
+        // 获取全部原始数据
+        dump($user->getData());
+    }
+```
+* ### __修改器 数据赋值时进行处理__
+```php
+    public function setNameAttr($value)//Name为数据库字段
+    {
+        return strtolower($value);
     }
 ```
 

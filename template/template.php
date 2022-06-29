@@ -12,6 +12,7 @@ class Test1
     {
         return '验证器和增删改查';
     }
+
     public function checkValidate()
     {
         //示例数据
@@ -43,6 +44,7 @@ class Test1
         //     $this->error($validate->getError());
         // }
     }
+
     public function add()
     {
         $data = $this->request->param('', '', 'trim,xss_clean');
@@ -56,6 +58,7 @@ class Test1
         Sora::create($Pushdata, true);
         $this->success('创建成功');
     }
+
     public function edit()
     {
         $data = $this->request->param('', '', 'trim,xss_clean');
@@ -84,6 +87,7 @@ class Test1
             $this->error('id不存在');
         }
     }
+
     public function del()
     {
         $this->request->param('id') ? $id = $this->request->param('id') : $this->error('参数错误');
@@ -95,9 +99,22 @@ class Test1
         }
         $this->success('成功',  $sora);
     }
+
     public function getData()
     {
         $id = $this->request->param('id');
         $this->success('获取成功', Sora::where('id', $id)->find());
     }
+
+    public function guolvData()
+    {
+        $isFilter = $this->request->param('isfilter', '');
+        Sora::whereLike('title', '%' . $isFilter . '%'); ///关键字过滤,为空不过滤
+
+        $a = ['id'=>109];
+        // $a = [];
+        return Sora::where($a)->select();   //数组控制查询条件
+
+    }
+    
 }
