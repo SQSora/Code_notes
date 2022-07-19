@@ -21,7 +21,7 @@ class Wechatpush
         
         $pushData = [
             'touser'       => '目标用户的openid',
-            'template_id'  => $template_id           //'tHRoi4rIN9k1R...'//在公众平台模板裤的模板ID
+            'template_id'  => $template_id,        //'tHRoi4rIN9k1R...'//在公众平台模板裤的模板ID
             // 'url' => $Gourl,                     //模板消息里“查看详情”的链接
             'topcolor'     => "#FF0000",            //顶部颜色,可不写.$data类同
             'data'         => $data,                //模板消息里的变量替换内容
@@ -44,7 +44,7 @@ class Wechatpush
     }
     
     //将userid转为openid
-    public function useridToopenid($userid)
+    public function useridToOpenid($userid)
     {
         $a = Third::where('user_id', $userid)->find();
         $b = Wechataccounts::where('unionid', $a['unionid'])->find();

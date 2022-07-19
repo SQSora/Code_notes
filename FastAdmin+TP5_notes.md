@@ -1,4 +1,4 @@
-SQSora 2022年6月29日 PHP TP5 FastAdmin MySQL WeChatPush  
+SQSora 2022年5月9日 PHP TP5 FastAdmin MySQL WeChatPush  
 
 
 
@@ -109,16 +109,25 @@ json_encode($data, JSON_UNESCAPED_UNICODE)   //???转义为中文并能保存中
 
 # **controller 控制器**
 
-## **API api开发相关**
 
-* ### 接收传参 POST
+* ### 前置操作 (里面好像都得写小写，即使方法名有大写，也得小写)
+    + [@文档](https://static.kancloud.cn/manual/thinkphp5/118050)
 ```php
-$data = $this->request->post('', '', 'trim,xss_clean'); //接收Object传参,默认值,过滤参数
-unset($data['id']);
+    protected $beforeActionList = [
+        'first',                                //在执行所有方法前都会执行first方法
+        'second' =>  ['except'=>'hello'],       //除hello方法外的方法执行前都要先执行second方法
+        'three'  =>  ['only'=>'hello,data'],    //只有hello/data方法执行前先执行three方法
+    ];
+```
+* ### 接收传参 param POST GET
+```php
+$data = $this->request->param('', '', 'trim,xss_clean'); //接收Object传参,默认值,过滤参数
+$data = $this->request->post('', '', 'trim,xss_clean'); //只能POST传参
+$data = $this->request->get('', '', 'trim,xss_clean'); //只能GET传参
+unset($data['id']); //接收全部数据并写入时候过滤恶意的id字段
 ```
 
-## **backend后台开发**
-        暂无
+
 
 # **Model 模型**
 
@@ -220,6 +229,16 @@ $\color{#00FFFF}{Ctrl + Shift + V 预览文件}$
 $config =  get_addon_config('cms'); //获取cms插件类的配置
 $变量 = $config['name1'];   //value1
 $变量 = $config['name2'];
+```
+* ## __正则表达式匹配链接__
+```php
+// $str = '<section class="_editor"><p><img src="http://img.index.png" "  alt="image.png"></p></section>';
+$str = '<p><br></p><div class="pgc-img"><img src="https://hostname.com" img_width="621" img_height="760" alt="123" inline="0"><p class="pgc-img-caption"></p></div><p data-track="1"><br></p><div class="pgc-img"><img src="https://127.0.0.1" img_width="625" img_height="650" alt="123" inline="0">';
+
+preg_match_all('/\bsrc\b\s*=\s*[\'\"]?([^\'\"]*)[\'\"]?/i', $str, $url);    //正则表达式匹配链接
+// preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", $str, $url);    //正则表达式匹配 为src= .... 和（gif|jpg|jpeg|bmp|png)后缀的链接
+
+return $url;
 ```
 
 * ## __微信消息推送 微信公众号 微信通知 微信模板__

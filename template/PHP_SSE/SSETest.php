@@ -2,7 +2,7 @@
 
 namespace addons\cms\controller\api;
 
-class Test1 extends Base
+class SSETest
 {
     public function index() //Server-Sent Events 服务器发送事件
     {

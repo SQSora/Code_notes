@@ -1,0 +1,26 @@
+命令：
+git clone <链接>	#拉取远程仓库资源。
+@不要忘记cd进文件夹
+
+git add . 	#添加文件
+使用git commit -am 'test' 就能将所有的文件提交
+git commit -m "text"		#生成一个commit
+git push origin master 	#将文件推送给服务器
+
+如果确保本地没问题的话，可以直接用git push -f强行上传
+git pull origin main 		#把本地仓库的变化连接到远程仓库主分支
+git push -u origin master 	#把本地仓库的文件推送到远程仓库
+	
+查看本地分支
+git branch
+
+切换分支
+git checkout
+
+.gitignore 
+
+告诉git这些文件不上传,子目录也可
+
+不生效：
+git rm -r --cached .
+远程拉取时会删除脱离版本控制的文件

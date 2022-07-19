@@ -5,7 +5,7 @@ namespace addons\cms\controller\api;
 use addons\cms\model\Sora;
 use think\Validate;
 
-class Test1
+class Template
 {
     protected $noNeedLogin = ['*']; //登录限制
     public function index()
@@ -13,7 +13,7 @@ class Test1
         return '验证器和增删改查';
     }
 
-    public function checkValidate()
+    public function checkValidate() //$this->validate();
     {
         //示例数据
         $data = [
@@ -49,7 +49,7 @@ class Test1
     {
         $data = $this->request->param('', '', 'trim,xss_clean');
         unset($data['id']);
-        
+
         $this->checkValidate($data);
         $ProData = [
             '附加的字段' => '附加的值',
@@ -57,6 +57,13 @@ class Test1
         $Pushdata =  array_merge_recursive($data, $ProData);
         Sora::create($Pushdata, true);
         $this->success('创建成功');
+        
+        //修改或者创建
+        if ($SoraModel  = Sora::where('user_id', $this->auth->id)->find()) {
+            $SoraModel->isUpdate(true)->save($data);
+        } else {
+           Sora::create($data, true);
+        };
     }
 
     public function edit()
@@ -66,18 +73,11 @@ class Test1
 
         $this->checkValidate($data);
         // 示例数据   
-        // $data = [
-        //     'id'  => 109,
-        //     'name' => 'SQSora',
-        //     'age'   => 1024,
-        // ];
-
-        //修改或者创建
-        if ($SoraModel  = Sora::where('user_id', $this->auth->id)->find()) {
-            $SoraModel->isUpdate(true)->save($data);
-        } else {
-            $SoraModel = Sora::create($data, true);
-        };
+        $data = [
+            'id'  => 1,
+            'name' => 'SQSora',
+            'age'   => 1024,
+        ];
 
         //只修改
         if ($sora = Sora::where('id', $data['id'])->find()) {
@@ -86,6 +86,14 @@ class Test1
         } else {
             $this->error('id不存在');
         }
+
+        //修改或者创建
+        if ($SoraModel  = Sora::where('user_id', $this->auth->id)->find()) {
+            $SoraModel->isUpdate(true)->save($data);
+        } else {
+            $SoraModel = Sora::create($data, true);
+        };
+
     }
 
     public function del()
@@ -106,15 +114,15 @@ class Test1
         $this->success('获取成功', Sora::where('id', $id)->find());
     }
 
-    public function guolvData()
+    public function filterData()
     {
         $isFilter = $this->request->param('isfilter', '');
-        Sora::whereLike('title', '%' . $isFilter . '%'); ///关键字过滤,为空不过滤
-
-        $a = ['id'=>109];
-        // $a = [];
-        return Sora::where($a)->select();   //数组控制查询条件
+        //1.关键字过滤,为空不过滤
+        Sora::whereLike('title', '%' . $isFilter . '%');
+        
+        //2.用数组控制查询条件
+        $a = ['id' => 109];
+        return Sora::where($a)->select();
 
     }
-    
 }

@@ -2,14 +2,8 @@
 
 namespace addons\cms\controller\api;
 
-use think\Db;
-
-use function PHPSTORM_META\type;
-
-class Test1 extends Base
+class Xingzuo
 {
-    protected $noNeedLogin = ['*'];
-
     public function index()
     {
         $month = 4;
@@ -25,7 +19,7 @@ class Test1 extends Base
      * */
     public static function get_xingzuo($month, $day)
     {
-        $xingzuo = '';
+        $xingzuo = '无效日期';
         // 检查参数有效性
         if ($month < 1 || $month > 12 || $day < 1 || $day > 31) {
             return $xingzuo;
